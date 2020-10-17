@@ -5,6 +5,10 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+
 training_inputs = np.array([[0, 0, 1],
                             [1, 1, 1],
                             [1, 0, 1],
@@ -22,10 +26,25 @@ synaptic_weights = 2 * np.random.random((3, 1)) - 1
 print('Random starting synaptic weights: ')
 print(synaptic_weights)
 
-for iteration in range(1):
+for iteration in range(20000):
 
     input_layer = training_inputs
-    output = sigmoid(np.dot(input_layer, synaptic_weights))
+    outputs = sigmoid(np.dot(input_layer, synaptic_weights))
+    # print('')
+
+    error = training_outputs - outputs
+    # print('error', error)
+
+    adjustments = error * sigmoid_derivative(outputs)
+    # print('adjustments', adjustments)
+
+    synaptic_weights += np.dot(input_layer.T, adjustments)
+    # print('synaptic_weights', synaptic_weights)
+
+
+print('')
+print('synaptic_weights after training: ')
+print(synaptic_weights)
 
 print('outputs after training: ')
-print(output)
+print(outputs)
